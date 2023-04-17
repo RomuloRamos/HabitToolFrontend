@@ -1,0 +1,12 @@
+- npm vite@latest
+- npm install
+- npm install -D tailwindcss postcss autoprefixer
+- npx tailwindcss init -p
+- create global.css with @tailwind base, utilities and components
+- import global at App.tsx;
+- config tailwind.config.cjs; 
+- Component library:    npm install @radix-ui/react-dialog
+                        npm install @radix-ui/react-popover
+                        npm install @radix-ui/react-checkbox
+- instal library to work with conditionals inside the CSS Class: npm install clsx
+- install axios: npm i axios
