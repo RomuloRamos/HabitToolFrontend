@@ -1,5 +1,9 @@
+import { useEffect, useState } from "react";
 import { generateDaysFromYearBegining } from "../utils/generate-days-from-year-begining";
 import { HabitDay } from "./HabitDay";
+import { api } from "../lib/axios";
+import dayjs from "dayjs";
+import { Summary, SummaryContext } from "../context/SummaryContext";
 
 const weekDays = ['D','S','T','Q','Q','S','S'];
 
@@ -8,7 +12,17 @@ const minimumSummaryDatesSize = 18 * 7; // 18 weeks
 const amountOfDaysToFill = minimumSummaryDatesSize - summaryDates.length;
 
 export function SummaryTable() {
+
+    const [summary, setSummary] = useState<Summary[]>([]);
+   
+    useEffect(()=>{
+        api.get('summary').then( response =>{
+            setSummary(response.data);
+        });
+    },[]);
+
     return (
+        <SummaryContext.Provider value={{ summary, setSummary }}>
         <div className="w-full flex">
             <div className="grid grid-rows-7 grid-flow-row gap-3">
                 {
@@ -23,13 +37,23 @@ export function SummaryTable() {
             </div>
             <div className="grid grid-rows-7 grid-flow-col gap-3">
                 {
-                   summaryDates.map((day) =>(
-                       <HabitDay 
-                            key={day.toString()}
-                            amount={10} 
-                            completed={10}
-                        />
-                   ))
+                    summary.length > 0 && summaryDates.map((date) =>{
+                        
+
+                        const dayInSummary = summary.find(day =>{
+                           
+                            return  dayjs(date).isSame(day.date, 'day'); //Checks if the date is equal considering up to day, discarding the hours.
+                        })
+
+                        return(
+                           <HabitDay 
+                               key={date.toString()}
+                               date={date}
+                               amount={dayInSummary?.amount} 
+                               defaultCompleted={dayInSummary?.completed}
+                           />
+                          )
+                   })
                 }
                 {
                    amountOfDaysToFill > 0 && Array.from({length: amountOfDaysToFill}).map(( _, index)=>{
@@ -40,5 +64,6 @@ export function SummaryTable() {
                 }
             </div>
         </div>
+        </SummaryContext.Provider>
     )
 }
