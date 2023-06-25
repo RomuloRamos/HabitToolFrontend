@@ -26,7 +26,7 @@ npm run dev
 5. Access the application in your browser at `http://localhost:5173`
 
 ## 💡 Usage
-![HabitToolFrontend Preview](./Demo/preview.gif)
+![HabitToolFrontend Preview](./Demo/Animation.gif)
 - Add daily habits that you want to track.
 - Mark the habits as completed every day.
 - Track your progress and view statistics of your habits.
